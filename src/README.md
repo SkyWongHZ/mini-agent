@@ -64,6 +64,15 @@ git checkout master   # 或 main,看你默认分支
 git reset --hard phase0-done    # ⚠️ 会丢失 Phase 1 之后的未 commit 改动
 ```
 
+## 推送到远程(GitHub)
+
+```bash
+git push                  # 普通 commit 跟着上去
+git push origin --tags    # ⚠️ tag **不**在默认 push 里,新打 tag 必须显式推一次
+```
+
+Repo: https://github.com/SkyWongHZ/mini-agent
+
 ## 运行
 
 ```bash

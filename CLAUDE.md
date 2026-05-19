@@ -55,10 +55,12 @@ Deliberate split to maximize learning per typed line. Future Claude sessions: **
 6. Answer the relevant self-check questions in [`LEARNING.md`](./LEARNING.md) (oral / mental is fine — write down only what you couldn't answer)
 7. Write `notes/phaseN.md` — this is the **real deliverable** of each phase, source code is the side product
 8. Update the progress table in [`src/README.md`](./src/README.md) — mark ✅, fill in notes filename + tag name
-9. Commit + tag the snapshot:
+9. Commit + tag the snapshot, push to remote:
    ```bash
    git add . && git commit -m "Phase N: <one-line summary>"
    git tag phaseN-done
+   git push                    # 提交跟着上去
+   git push origin --tags      # ⚠️ 默认 push 不带 tag,必须显式推
    ```
    Later you can `git show phaseN-done:<file>` or `git diff phaseN-done phase(N+1)-done -- src/` to see what changed.
 
