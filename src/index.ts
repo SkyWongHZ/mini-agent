@@ -1,38 +1,15 @@
-import OpenAI from "openai";
-import dotenv from "dotenv";
-dotenv.config();
+// CLI 入口:读命令行参数,调 agent,打印最终回复
+// Phase 0 的硬编码两轮已用 git tag phase0-done 保存,可 `git show phase0-done:src/index.ts` 回看
 
-  const openai = new OpenAI({
-    baseURL: 'https://api.deepseek.com',
-    apiKey: process.env.DEEPSEEK_API_KEY,
-  });
-  let completion
-  const messages = [
-    { role: "system", content: "You are a helpful assistant." },
-    { role: "user", content: "浙江的省会是哪里?" }
-  ]
+import { runAgent } from './agent'
 
-  completion=await openai.chat.completions.create({
-    messages:messages,
-    model: "deepseek-v4-flash",
-    stream: false,
-  });
+const userInput = process.argv.slice(2).join(' ').trim()
 
-  // ⭐ Phase 0 关键:把模型刚才的回答 push 回 messages 数组。
-  // 下一轮 API 调用时,模型才能"看到"自己上一轮说过什么 ——
-  // 否则模型只看到两条连续的 user message,中间断了一截。
-  // Phase 1 的 tool_calls 也是同样的 push-回-messages 模式。
-  messages.push({
-    role: "assistant",
-    content: completion.choices[0].message.content
-  })
+if (!userInput) {
+  console.error('Usage: pnpm dev "你的问题"')
+  process.exit(1)
+}
 
-  messages.push( { role: "user", content: "省会城市身份证开头是多少?" })
-  completion=await openai.chat.completions.create({
-    messages:messages,
-    model: "deepseek-v4-flash",
-    stream: false,
-  });
-
-
-  console.log(completion.choices[0].message.content) 
+console.log(`\nUser: ${userInput}\n`)
+const reply = await runAgent(userInput)
+console.log(`\nAgent: ${reply}`)
