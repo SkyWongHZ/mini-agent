@@ -42,16 +42,27 @@ Deliberate split to maximize learning per typed line. Future Claude sessions: **
 
 ### Per-phase workflow
 
-1. Read the matching example in [`pguso/ai-agents-from-scratch`](https://github.com/pguso/ai-agents-from-scratch)
+**During the phase (writing the concept code):**
+
+1. Read the matching example in [`pguso/ai-agents-from-scratch`](https://github.com/pguso/ai-agents-from-scratch) — see [`docs/pguso-mapping.md`](./docs/pguso-mapping.md) for the per-phase reading list
 2. Close that tab
 3. Write the concept code here, no peeking
 4. When stuck → ask Claude focused questions (**not** "write it for me")
 5. Once it runs → Claude code-reviews
-6. Answer the self-check questions in [`LEARNING.md`](./LEARNING.md) for that phase
-7. Write `notes/phaseN.md` explaining the phase in user's own words
-8. Only then move to Phase N+1
 
-**Why this split**: letting Claude write the concept code is the same anti-pattern as using LangChain — it hides exactly the mechanics the user is trying to internalize.
+**Closing ritual (do all four before starting Phase N+1):**
+
+6. Answer the relevant self-check questions in [`LEARNING.md`](./LEARNING.md) (oral / mental is fine — write down only what you couldn't answer)
+7. Write `notes/phaseN.md` — this is the **real deliverable** of each phase, source code is the side product
+8. Update the progress table in [`src/README.md`](./src/README.md) — mark ✅, fill in notes filename + tag name
+9. Commit + tag the snapshot:
+   ```bash
+   git add . && git commit -m "Phase N: <one-line summary>"
+   git tag phaseN-done
+   ```
+   Later you can `git show phaseN-done:<file>` or `git diff phaseN-done phase(N+1)-done -- src/` to see what changed.
+
+**Why this split**: letting Claude write the concept code is the same anti-pattern as using LangChain — it hides exactly the mechanics the user is trying to internalize. The closing ritual ensures each milestone is recoverable and your understanding is recorded.
 
 ## Tech stack
 

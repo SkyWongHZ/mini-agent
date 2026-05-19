@@ -26,21 +26,49 @@ src/
     └── *.ts        # 各 tool 实现
 ```
 
-## 当前进度(每完成一个 phase 勾选 + 在 `notes/phaseN.md` 写复盘)
+## 当前进度
 
-- [ ] Phase 0 — Chat Loop
-- [ ] Phase 1 — Tools / ReAct
-- [ ] Phase 2 — Permissions + Hooks
-- [ ] Phase 3 — Context + Trace
-- [ ] Phase 4 — Evals
-- [ ] Phase 5 — MCP
-- [ ] Phase 6 — Subagent
-- [ ] Phase 7 — Skills(可选)
+每完成一个 phase:勾选 + 写 `notes/phaseN.md` + `git tag phaseN-done`。
 
-## 运行(Phase 0 跑通后)
+| | Phase | 笔记 | Git tag |
+|---|---|---|---|
+| ✅ | Phase 0 — Chat Loop | `notes/phase0.md` | `phase0-done` |
+| ✅ | Phase 1 — Tools / ReAct | `notes/phase1.md` | `phase1-done` |
+| ⏭ | Phase 2 — Permissions + Hooks | | |
+| ⏭ | Phase 3 — Context + Trace | | |
+| ⏭ | Phase 4 — Evals | | |
+| ⏭ | Phase 5 — MCP | | |
+| ⏭ | Phase 6 — Subagent | | |
+| ⏭ | Phase 7 — Skills(可选) | | |
+
+## 回看历史 phase 代码
+
+每个 phase 完成时 commit + tag,可以随时回去看当时的样子或对比演进:
+
+```bash
+# 看某个 phase 完成时的某个文件
+git show phase0-done:src/index.ts
+git show phase1-done:src/agent.ts
+
+# 对比两个 phase 之间 src/ 的全部变化
+git diff phase0-done phase1-done -- src/
+
+# 临时切回某个 phase(只读地浏览)
+git checkout phase0-done
+# 看完回到主线
+git checkout master   # 或 main,看你默认分支
+```
+
+如果某个 phase 想"重做"(比如 Phase 1 写得不满意,想 fresh start):
+```bash
+git reset --hard phase0-done    # ⚠️ 会丢失 Phase 1 之后的未 commit 改动
+```
+
+## 运行
 
 ```bash
 pnpm install
 echo "DEEPSEEK_API_KEY=sk-..." > .env
-pnpm tsx src/index.ts "你好"
+pnpm dev "23 * 47 等于多少"      # 注意带引号,否则 shell 会展开 *
+pnpm dev "北京天气怎么样"
 ```
