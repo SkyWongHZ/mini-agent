@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:kevinyank.com)",
+      "WebFetch(domain:api-docs.deepseek.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:agentsfromscratch.com)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm exec *)",
+      "Bash(claude mcp *)",
+      "mcp__yuque-mcp__yuque_get_user",
+      "mcp__yuque-mcp__yuque_list_books",
+      "mcp__yuque-mcp__yuque_get_toc",
+      "mcp__yuque-mcp__yuque_get_doc",
+      "mcp__yuque-mcp__yuque_create_doc",
+      "Skill(weekly-report)",
+      "Bash(pnpm add *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git tag *)"
+    ]
+  }
+}

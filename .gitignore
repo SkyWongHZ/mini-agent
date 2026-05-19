@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment (secrets)
+.env
+.env.local
+
+# Build output
+dist/
+
+# Logs
+logs/
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Independent reference projects (each has its own git history)
+example/
