@@ -43,9 +43,9 @@ If you're a new AI session (Codex, Claude, whatever) opening this repo, internal
 
 > Update this paragraph at the end of each closing ritual.
 
-**Most recent**: Phase 2 — Permissions + Hooks. Design in [`docs/phase2-hooks-design.md`](./docs/phase2-hooks-design.md) (Q1-Q5 + Promise analogy + Claude Code / Express 对照). Notes in [`notes/phase2.md`](./notes/phase2.md). Verified via the 6-case checklist at the bottom of the design doc (calculator no-confirm / write_file y / write_file N / tool 抛错 / 不调工具).
+**Most recent**: Phase 3A — Runtime Context + Trace. Design in [`docs/phase3-context-design.md`](./docs/phase3-context-design.md) (Q1-Q7 + review 补充:AgentStats 字段、字符预算口径、budget_stop/final 语义、toolCalls 计数). Notes in [`notes/phase3.md`](./notes/phase3.md). Verified manually: `pnpm typecheck`, no-tool 问答, calculator 单工具, write_file 拒绝, `maxToolCalls` 预算, `maxContextChars` trim。Phase 3A 只做单次 run 内的 runtime context;长期记忆 / `saveMemory` / memory 持久化留到后续独立阶段。
 
-**Next up**: Phase 3 — Context + Trace (`maxTurns` / `maxToolCalls` 已经在 agent.ts 雏形里;还需:transcript 记录、history trimming、token 计数)。Phase 3 没有 pguso 一对一参考,需要先写 `docs/phase3-context-design.md` 走 Q&A 决策流程,再写代码。
+**Next up**: Phase 4 — Evals。目标是建 5-10 条固定任务,覆盖无 tool / 单 tool / 多 tool / tool error / 权限拒绝,先脚本 + 人工检查 transcript,后续再做自动断言。
 
 ## What this project is
 

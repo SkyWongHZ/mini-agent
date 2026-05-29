@@ -35,7 +35,7 @@ src/
 | ✅ | Phase 0 — Chat Loop | — (跟随 pguso) | `notes/phase0.md` |
 | ✅ | Phase 1 — Tools / ReAct | — (跟随 pguso) | `notes/phase1.md` |
 | ✅ | Phase 2 — Permissions + Hooks | `docs/phase2-hooks-design.md` | `notes/phase2.md` |
-| ⏭ | Phase 3 — Context + Trace | | |
+| ✅ | Phase 3 — Context + Trace | `docs/phase3-context-design.md` | `notes/phase3.md` |
 | ⏭ | Phase 4 — Evals | | |
 | ⏭ | Phase 5 — MCP | | |
 | ⏭ | Phase 6 — Subagent | | |
