@@ -8,6 +8,8 @@ import { getToolsForLLM, callTool } from './tools/registry'
 // 副作用 import:触发每个 tool 文件末尾的 registerTool(...)
 import './tools/calculator'
 import './tools/weather'
+import './tools/write_file'    // Phase 2 新增:危险工具(category: 'write')
+import './hooks'                // Phase 2 新增:触发 logger + confirm hook 注册
 
 const MAX_TURNS = 10
 
@@ -53,9 +55,8 @@ export async function runAgent(userInput: string): Promise<string> {
         tool_call_id: call.id,   // ← 必须带,LLM 靠这个把结果对应回它的 tool_call
         content: result,
       })
-
-      // 简单 trace —— Phase 3 时这里会变成更结构化的 transcript / token 统计
-      console.log(`  ↳ [tool] ${call.function.name}(${call.function.arguments}) → ${result}`)
+      // 注:Phase 1 时这里有 console.log 手动 trace,
+      // Phase 2 之后 loggerHook 接管,所以删掉避免重复输出
     }
     // 进入下一轮,模型看到 tool 结果后会决定:继续调工具 / 给最终答案
   }

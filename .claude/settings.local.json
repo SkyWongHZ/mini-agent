@@ -21,7 +21,17 @@
       "Bash(git commit *)",
       "Bash(git tag *)",
       "Bash(pnpm typecheck *)",
-      "Bash(pnpm dev *)"
+      "Bash(pnpm dev *)",
+      "Bash(grep -E '\\\\.\\(env|envrc|key|pem|p12\\)$')",
+      "Bash(git grep *)",
+      "Bash(grep -E '^\\\\+.*sk-[a-zA-Z0-9]{20,}')",
+      "Bash(grep -E '^\\\\.env$' .gitignore)",
+      "Bash(grep -E '^\\\\.env$')",
+      "Bash(gh auth *)",
+      "Bash(gh repo *)",
+      "Bash(git push *)",
+      "Read(//tmp/**)",
+      "Bash(rm -f /tmp/test_phase2_no.txt)"
     ]
   }
 }

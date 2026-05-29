@@ -4,6 +4,49 @@ A from-scratch Node.js / TypeScript learning project for understanding LLM agent
 
 This is the canonical project brief for AI coding agents. Claude Code imports this file from `CLAUDE.md`.
 
+## For the AI assistant picking this up
+
+If you're a new AI session (Codex, Claude, whatever) opening this repo, internalize these before doing anything else.
+
+### User profile
+
+- Senior Node.js / TypeScript developer. Comfortable with the language, tooling, and engineering practice.
+- **New to LLM agent fundamentals** — this entire repo exists to learn them. Treat unfamiliarity with agent concepts as expected, but **don't underestimate engineering skill**.
+- **Does not use Python.** Don't reach for Python references, pseudocode, or "in Python you'd...". Stay in the JS/TS ecosystem.
+- Writes notes and asks questions in Chinese. Match Chinese in explanations, commit messages, and notes; English in code and identifiers is fine.
+
+### Behavioral norms
+
+- **Respect [Working mode](#working-mode-ai-assistant--user) strictly.** User writes concept code, you write scaffolding. **Never** offer to write the agent loop / tool registry / hook chain / MCP wiring / context manager / subagent dispatcher — even if the user seems stuck. When in doubt, ask focused questions; don't write the thing being studied.
+- **Don't over-quiz once understanding is demonstrated.** A working run + a coherent debug story = they got it. Move on, don't ask "do you understand X" three different ways.
+- **Be terse.** No trailing recaps ("to summarize..."), no "let me know if..." sign-offs, no emojis unless explicitly asked.
+- **Don't auto-commit.** Show the diff, summarize what changed, wait for explicit "commit" or "push" from the user.
+
+### Cold-start read order
+
+1. **This file (`AGENTS.md`)** — project rules, Working mode, phased plan, hard constraints
+2. **Latest `notes/phaseN.md`** — what's verified + the user's current mental model + open questions
+3. **Latest `docs/phaseN-<topic>-design.md`** — frozen design rationale + verification checklist (the canonical "why" record)
+4. **`src/README.md`** — progress table (the source of truth for "what phase are we on")
+5. **`src/*.ts`** — inline comments are intentionally dense; read them before suggesting changes
+
+### Where things live
+
+| | |
+|---|---|
+| Per-phase design decisions | `docs/phaseN-<topic>-design.md` — mandatory each phase (see workflow below) |
+| Per-phase reflections /踩坑 | `notes/phaseN.md` |
+| "What's done" source of truth | progress table in `src/README.md` |
+| Follow-along reference repo | `example/ai-agents-from-scratch/` + `docs/pguso-mapping.md` |
+
+### Current state
+
+> Update this paragraph at the end of each closing ritual.
+
+**Most recent**: Phase 2 — Permissions + Hooks. Design in [`docs/phase2-hooks-design.md`](./docs/phase2-hooks-design.md) (Q1-Q5 + Promise analogy + Claude Code / Express 对照). Notes in [`notes/phase2.md`](./notes/phase2.md). Verified via the 6-case checklist at the bottom of the design doc (calculator no-confirm / write_file y / write_file N / tool 抛错 / 不调工具).
+
+**Next up**: Phase 3 — Context + Trace (`maxTurns` / `maxToolCalls` 已经在 agent.ts 雏形里;还需:transcript 记录、history trimming、token 计数)。Phase 3 没有 pguso 一对一参考,需要先写 `docs/phase3-context-design.md` 走 Q&A 决策流程,再写代码。
+
 ## What this project is
 
 **Goal**: deeply understand the core concepts of LLM agents — **Tools, Hooks, MCP, Subagent, Skills** — by implementing each one from scratch, no high-level frameworks.
@@ -48,7 +91,7 @@ Deliberate split to maximize learning per typed line. Future AI assistant sessio
 
 1. Read the matching example in [`pguso/ai-agents-from-scratch`](https://github.com/pguso/ai-agents-from-scratch) — see [`docs/pguso-mapping.md`](./docs/pguso-mapping.md) for the per-phase reading list
 2. Close that tab
-3. **If the phase has non-trivial design choices** (no pguso reference, or multiple competing approaches): work through them with the AI assistant Q&A-style **before coding**, then write `docs/phaseN-<topic>-design.md` capturing alternatives + rationale. See [`docs/phase2-hooks-design.md`](./docs/phase2-hooks-design.md) as the canonical example. This is the **"why we did it this way"** record for future-you and future AI sessions — preserves design intent even when source code evolves.
+3. **Write a design doc before coding — every phase, mandatory.** Work through design choices with the AI assistant Q&A-style first, then write `docs/phaseN-<topic>-design.md` capturing alternatives considered, the decision, and *why*. See [`docs/phase2-hooks-design.md`](./docs/phase2-hooks-design.md) as the canonical example. For phases that closely follow pguso with no real choices, still write a short doc that says "followed pguso XX, no alternatives considered" — the discipline of producing one per phase matters. **This doc + the `notes/phaseN.md` from the closing ritual are how each phase is anchored in the repo (we don't use git tags anymore — see step 10).**
 4. Write the concept code here, no peeking
 5. When stuck → ask the AI assistant focused questions (**not** "write it for me")
 6. Once it runs → AI assistant code-reviews
@@ -56,18 +99,17 @@ Deliberate split to maximize learning per typed line. Future AI assistant sessio
 **Closing ritual (do all four before starting Phase N+1):**
 
 7. Answer the relevant self-check questions in [`LEARNING.md`](./LEARNING.md) (oral / mental is fine — write down only what you couldn't answer)
-8. Write `notes/phaseN.md` — this is the **real deliverable** of each phase, source code is the side product
-9. Update the progress table in [`src/README.md`](./src/README.md) — mark ✅, fill in notes filename + tag name
-10. Commit + tag the snapshot, push to remote:
-   ```bash
-   git add . && git commit -m "Phase N: <one-line summary>"
-   git tag phaseN-done
-   git push                    # 提交跟着上去
-   git push origin --tags      # ⚠️ 默认 push 不带 tag,必须显式推
-   ```
-   Later you can `git show phaseN-done:<file>` or `git diff phaseN-done phase(N+1)-done -- src/` to see what changed.
+8. Write `notes/phaseN.md` — reflection notes on what was built and learned. Together with the design doc from step 3, **this is the real per-phase deliverable; source code is the side product**.
+9. Update the progress table in [`src/README.md`](./src/README.md) — mark ✅, link to the design doc + notes
+10. Commit + push:
+    ```bash
+    git add . && git commit -m "Phase N: <one-line summary>"
+    git push
+    ```
 
-**Why this split**: letting the AI assistant write the concept code is the same anti-pattern as using LangChain — it hides exactly the mechanics the user is trying to internalize. The closing ritual ensures each milestone is recoverable and your understanding is recorded.
+> **Why no git tags?** From Phase 2 onward we anchor each phase via `docs/phaseN-*.md` + `notes/phaseN.md` instead. They live in the repo as plain files (survive forever, searchable, reviewable in PRs) and avoid the `git push --tags` footgun. Existing `phase0-done` / `phase1-done` tags are kept as-is — no need to delete or backfill new ones.
+
+**Why this split**: letting the AI assistant write the concept code is the same anti-pattern as using LangChain — it hides exactly the mechanics the user is trying to internalize. The per-phase design doc + notes ensure each milestone is recoverable and your understanding is recorded.
 
 ## Tech stack
 

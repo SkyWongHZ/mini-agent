@@ -28,13 +28,13 @@ src/
 
 ## 当前进度
 
-每完成一个 phase:勾选 + 写 `notes/phaseN.md` + `git tag phaseN-done`。
+每完成一个 phase:勾选 + 写 `notes/phaseN.md` + `docs/phaseN-<topic>-design.md`,然后 commit & push。
 
-| | Phase | 笔记 | Git tag |
+| | Phase | 设计文档 | 笔记 |
 |---|---|---|---|
-| ✅ | Phase 0 — Chat Loop | `notes/phase0.md` | `phase0-done` |
-| ✅ | Phase 1 — Tools / ReAct | `notes/phase1.md` | `phase1-done` |
-| ⏭ | Phase 2 — Permissions + Hooks | | |
+| ✅ | Phase 0 — Chat Loop | — (跟随 pguso) | `notes/phase0.md` |
+| ✅ | Phase 1 — Tools / ReAct | — (跟随 pguso) | `notes/phase1.md` |
+| ✅ | Phase 2 — Permissions + Hooks | `docs/phase2-hooks-design.md` | `notes/phase2.md` |
 | ⏭ | Phase 3 — Context + Trace | | |
 | ⏭ | Phase 4 — Evals | | |
 | ⏭ | Phase 5 — MCP | | |
@@ -43,32 +43,22 @@ src/
 
 ## 回看历史 phase 代码
 
-每个 phase 完成时 commit + tag,可以随时回去看当时的样子或对比演进:
+Phase 2 起,**每阶段的「设计文档 + 笔记」就是阶段快照** —— 它们以普通文件留在 repo 里,永远在。要看当时代码,直接走 commit 历史:
 
 ```bash
-# 看某个 phase 完成时的某个文件
-git show phase0-done:src/index.ts
-git show phase1-done:src/agent.ts
+# 看 Phase N 完成时的所有 commit
+git log --oneline --grep="^Phase 2"
 
-# 对比两个 phase 之间 src/ 的全部变化
-git diff phase0-done phase1-done -- src/
-
-# 临时切回某个 phase(只读地浏览)
-git checkout phase0-done
-# 看完回到主线
-git checkout master   # 或 main,看你默认分支
+# 对比两个 phase 之间 src/ 的全部变化(<sha-A> 为 Phase N 收尾 commit)
+git diff <sha-A> <sha-B> -- src/
 ```
 
-如果某个 phase 想"重做"(比如 Phase 1 写得不满意,想 fresh start):
-```bash
-git reset --hard phase0-done    # ⚠️ 会丢失 Phase 1 之后的未 commit 改动
-```
+> Phase 0 / 1 仍有遗留 tag `phase0-done` / `phase1-done`,`git show phase0-done:src/index.ts` 等还能用。Phase 2 起不再新打 tag(避免 `git push --tags` 的脚枪)。
 
 ## 推送到远程(GitHub)
 
 ```bash
-git push                  # 普通 commit 跟着上去
-git push origin --tags    # ⚠️ tag **不**在默认 push 里,新打 tag 必须显式推一次
+git push   # commit 跟着上去就好,不再有 tag 要推
 ```
 
 Repo: https://github.com/SkyWongHZ/mini-agent
