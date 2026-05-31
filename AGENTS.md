@@ -45,7 +45,7 @@ If you're a new AI session (Codex, Claude, whatever) opening this repo, internal
 
 **Most recent**: Phase 3A — Runtime Context + Trace. Design in [`docs/phase3-context-design.md`](./docs/phase3-context-design.md) (Q1-Q7 + review 补充:AgentStats 字段、字符预算口径、budget_stop/final 语义、toolCalls 计数). Notes in [`notes/phase3.md`](./notes/phase3.md). Verified manually: `pnpm typecheck`, no-tool 问答, calculator 单工具, write_file 拒绝, `maxToolCalls` 预算, `maxContextChars` trim。Phase 3A 只做单次 run 内的 runtime context;长期记忆 / `saveMemory` / memory 持久化留到后续独立阶段。
 
-**Next up**: Phase 5 — MCP(把 tools 重构成独立 stdio server)。**Phase 4 — Evals 主动跳过**,理由见 [`notes/phase4-skipped.md`](./notes/phase4-skipped.md):eval 是工程方法不是能力构造块,当前没有回归测试的实际痛点,等真需要时再补;跳过不影响 Phase 5/6。Phase 3 的 `{ reply, transcript, stats }` 结构保留,以后接 eval 随时能用。
+**Next up**: Phase 5 — MCP(**Client / Host 为主线**:用官方 SDK 写 client,外接一个现成的 stdio server,如官方 filesystem server,通过协议发现并调用它的工具,喂回 agent loop)。**Phase 4 — Evals 主动跳过**,理由见 [`notes/phase4-skipped.md`](./notes/phase4-skipped.md):eval 是工程方法不是能力构造块,当前没有回归测试的实际痛点,等真需要时再补;跳过不影响 Phase 5/6。Phase 3 的 `{ reply, transcript, stats }` 结构保留,以后接 eval 随时能用。
 
 ## What this project is
 
@@ -161,7 +161,7 @@ mini-agent/
 2. **Permissions + Hooks** — `preToolCall` / `postToolCall`; logger + confirm + read/write/bash permission scaffolding
 3. **Context + Trace** — `maxTurns` / `maxToolCalls`, transcript, history trimming
 4. **Evals** — 5-10 fixed tasks covering: no-tool, single-tool, multi-tool, tool error, permission denial
-5. **MCP** — refactor tools into a standalone MCP server (stdio)
+5. **MCP** — MCP Client / Host: connect to an existing stdio server (e.g. the official filesystem server), discover its tools over the protocol, and call them from the agent loop
 6. **Subagent** — main agent delegates to role-specific sub-agents (research / code / review)
 7. **Skills** *(optional)* — provider-agnostic `SKILL.md` loader first; vendor SDK later
 

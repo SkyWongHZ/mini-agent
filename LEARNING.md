@@ -39,8 +39,8 @@
 
 ### API / 协议参考(只查接口,不照搬框架)
 - **[DeepSeek API Docs](https://api-docs.deepseek.com/)** — 当前模型名、OpenAI 兼容调用、Tool Calls
-- **[modelcontextprotocol/typescript-sdk](https://github.com/modelcontextprotocol/typescript-sdk)** — 阶段 5 MCP 时使用
-- **MCP Inspector** — 阶段 5 验证 MCP server 是否能列出工具
+- **[modelcontextprotocol/typescript-sdk](https://github.com/modelcontextprotocol/typescript-sdk)** — 阶段 5 MCP client 时使用
+- **MCP Inspector** — 阶段 5 用来确认要外接的现成 server 暴露了哪些工具
 
 ### 后期再看(现阶段不碰)
 - [langchain-ai/agents-from-scratch-ts](https://github.com/langchain-ai/agents-from-scratch-ts) — 等理解概念后再用框架
@@ -56,7 +56,7 @@
 | 2 | **Permissions + Hooks(权限与生命周期)** | `preToolCall` / `postToolCall` + logger + confirm | 写文件/执行命令等危险工具会被权限 hook 拦住 |
 | 3 | **Context + Trace(上下文与可观测性)** | 简单 transcript、token/轮数预算、历史裁剪或摘要 | 长一点的任务不会无限堆 messages;失败时能复盘 |
 | 4 | **Evals(最小评测)** | 5-10 条固定任务 + 期望行为检查 | 每次改 loop / tool / prompt 后能发现退化 |
-| 5 | **MCP(工具协议)** | 把 tools 重构为 MCP server,通过 stdio 调 | MCP Inspector 能列出工具;agent 行为不变 |
+| 5 | **MCP(工具协议)** | MCP Client / Host:外接一个现成 stdio server(如官方 filesystem server) | agent 能通过协议发现并调用外部 server 的工具 |
 | 6 | **Subagent(多 agent)** | 主 agent 派发任务给 role-specific subagents | 复合任务能被正确路由,子 agent 输出可追踪 |
 | 7 | **Skills(可选)** | 先做 provider-agnostic `SKILL.md` loader,以后再接 Claude/GPT SDK | skill 能改变 agent 行为,且不依赖特定厂商 SDK |
 
@@ -114,10 +114,11 @@
   - 权限被拒绝后的回答
 - 评测可以先是脚本 + 人工检查 transcript,后面再做自动断言
 
-### Phase 5:MCP
-- 先保证 Phase 1-4 的本地 tools 行为稳定
-- 再把 tools 搬到 MCP server
-- agent 通过 MCP client 调工具,外部行为应尽量不变
+### Phase 5:MCP(Client / Host 为主线)
+- 重点学的是 **agent 如何消费外部工具**:做 MCP **Client / Host**,而不是自己写 server
+- 用官方 `@modelcontextprotocol/sdk` 写一个 client,启动一个**现成的 stdio server**(如官方 filesystem server)作为子进程
+- client 通过协议**发现(list)**该 server 暴露的工具,再**调用(call)**,把结果喂回 agent loop
+- 这印证了真实生态的做法:做 agent = 做 MCP client 外接现成 server(写 server 是另一顶帽子,不在本阶段)
 
 ### Phase 6:Subagent
 - 不要一开始做复杂多 agent 协作
