@@ -1,18 +1,10 @@
 {
-  "name": "mini-agent",
+  "name": "mini-agent-monorepo",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
-  "description": "From-scratch Node.js / TypeScript learning project for understanding LLM agent fundamentals",
+  "description": "Monorepo: from-scratch LLM agent (packages/mini-agent) + 框架学习轨 (packages/langchain-lab, langgraph-lab)",
   "scripts": {
-    "dev": "tsx src/index.ts",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "dotenv": "^17.2.3",
-    "openai": "^6.7.0",
-    "zod": "^4.4.3",
-    "zod-to-json-schema": "^3.25.2"
+    "typecheck": "pnpm -r typecheck"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

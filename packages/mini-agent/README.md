@@ -1,6 +1,6 @@
-# `src/` — mini-agent CLI 实现
+# `packages/mini-agent` — 从零手写的 agent 核心
 
-Phase 0 - 7 的代码**全部在这里**增量构造。
+Phase 0 - 7 的代码**全部在这个包的 `src/`**里增量构造。这是 pnpm monorepo 的一个包;框架学习轨在 `packages/langchain-lab` 等(见仓库根 `AGENTS.md`)。
 
 ## 谁在这里写代码?
 
@@ -49,8 +49,9 @@ Phase 2 起,**每阶段的「设计文档 + 笔记」就是阶段快照** ——
 # 看 Phase N 完成时的所有 commit
 git log --oneline --grep="^Phase 2"
 
-# 对比两个 phase 之间 src/ 的全部变化(<sha-A> 为 Phase N 收尾 commit)
-git diff <sha-A> <sha-B> -- src/
+# 对比两个 phase 之间核心代码的全部变化(<sha-A> 为 Phase N 收尾 commit)
+# 注:monorepo 化之前的 commit 路径是 src/,之后是 packages/mini-agent/src/
+git diff <sha-A> <sha-B> -- packages/mini-agent/src/ src/
 ```
 
 > Phase 0 / 1 仍有遗留 tag `phase0-done` / `phase1-done`,`git show phase0-done:src/index.ts` 等还能用。Phase 2 起不再新打 tag(避免 `git push --tags` 的脚枪)。
@@ -66,8 +67,12 @@ Repo: https://github.com/SkyWongHZ/mini-agent
 ## 运行
 
 ```bash
+# 在仓库根:装全 workspace + 写根 .env(所有包共享)
 pnpm install
 echo "DEEPSEEK_API_KEY=sk-..." > .env
-pnpm dev "23 * 47 等于多少"      # 注意带引号,否则 shell 会展开 *
-pnpm dev "北京天气怎么样"
+
+# 跑核心 agent(任选其一)
+pnpm --filter mini-agent dev "23 * 47 等于多少"   # 从仓库根;注意带引号,否则 shell 展开 *
+pnpm --filter mini-agent dev "北京天气怎么样"
+# 或进到包目录:cd packages/mini-agent && pnpm dev "..."
 ```

@@ -72,6 +72,8 @@
 
 ## 每阶段最小产物
 
+> 📁 **路径提示**:仓库已 monorepo 化,下面各产物里的 `src/...` 一律指 `packages/mini-agent/src/...`(core 包);运行用 `pnpm --filter mini-agent dev "..."`。框架学习轨(LangChain/LangGraph)在 `packages/*-lab`,不在本路线图内。
+
 ### Phase 0:Chat Loop
 - `package.json` / `tsconfig.json`
 - `src/index.ts`:读取 CLI 参数,打印模型回复

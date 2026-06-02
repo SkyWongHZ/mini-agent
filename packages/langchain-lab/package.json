@@ -1,0 +1,21 @@
+{
+  "name": "langchain-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "LangChain.js 学习轨 —— 与 mini-agent 核心隔离的独立包,概念代码由 user 手写",
+  "scripts": {
+    "dev": "tsx --env-file=../../.env",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.0",
+    "@langchain/openai": "^0.3.0",
+    "dotenv": "^17.2.3",
+    "langchain": "^0.3.0",
+    "zod": "^3.23.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

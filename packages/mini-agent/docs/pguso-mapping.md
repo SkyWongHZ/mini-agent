@@ -1,8 +1,10 @@
 # `pguso/ai-agents-from-scratch` → 本项目 Phase 映射
 
 > **用法**:写代码时**对照查表**,而不是用来抄。
-> 标准工作流见 `CLAUDE.md` 的 `## Working mode`:**读 pguso 对应章节的 `CONCEPT.md` → 关 tab → 在 `src/` 自己写**。
+> 标准工作流见 `CLAUDE.md` 的 `## Working mode`:**读 pguso 对应章节的 `CONCEPT.md` → 关 tab → 在 `packages/mini-agent/src/` 自己写**。
 > 学习节奏见 `LEARNING.md`。
+>
+> 📁 **路径提示**:仓库已 monorepo 化,下文出现的 `src/` 一律指 `packages/mini-agent/src/`(core 包内的 src)。运行命令是 `pnpm --filter mini-agent dev "..."`。
 
 ## 网站还是 repo?**用 repo**
 
@@ -64,7 +66,7 @@
 - 必读:`02_openai-intro/CONCEPT.md`
 - 看完关 tab,自己在 `src/index.ts` + `src/llm.ts` 里写一个 ~30 行 chat 循环
 - 重点理解:**messages 数组怎么累积、system prompt 放哪一条**
-- pguso **没覆盖**:对话历史持久化(可以等以后从 `example/AI-chatbot/` 学)
+- pguso **没覆盖**:对话历史持久化(可以等以后从 `packages/mini-agent/example/AI-chatbot/` 学)
 
 ### Phase 1 — Tools / ReAct
 - 必读:`07_simple-agent/CONCEPT.md` + `09_react-agent/CONCEPT.md`
@@ -109,19 +111,19 @@
 
 ```bash
 # Phase 0 — Chat Loop
-example/ai-agents-from-scratch/examples/02_openai-intro/CONCEPT.md
+packages/mini-agent/example/ai-agents-from-scratch/examples/02_openai-intro/CONCEPT.md
 
 # Phase 1 — Tools / ReAct(两份都看,重点对比 07 和 09 的差异)
-example/ai-agents-from-scratch/examples/07_simple-agent/CONCEPT.md
-example/ai-agents-from-scratch/examples/09_react-agent/CONCEPT.md
+packages/mini-agent/example/ai-agents-from-scratch/examples/07_simple-agent/CONCEPT.md
+packages/mini-agent/example/ai-agents-from-scratch/examples/09_react-agent/CONCEPT.md
 
 # Phase 2 — Permissions + Hooks
 # ❌ pguso 无对应 — 直接和 Claude 讨论 hook 链设计
 
 # Phase 3 — Context + Trace
-example/ai-agents-from-scratch/examples/08_simple-agent-with-memory/CONCEPT.md
+packages/mini-agent/example/ai-agents-from-scratch/examples/08_simple-agent-with-memory/CONCEPT.md
 # 选读(错误处理 / trace 思路):
-example/ai-agents-from-scratch/examples/11_error-handling/CONCEPT.md
+packages/mini-agent/example/ai-agents-from-scratch/examples/11_error-handling/CONCEPT.md
 
 # Phase 4 — Evals
 # ❌ pguso 无对应
