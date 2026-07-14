@@ -17,18 +17,27 @@ If you're a new AI session (Codex, Claude, whatever) opening this repo, internal
 
 ### Behavioral norms
 
-- **Respect [Working mode](#working-mode-ai-assistant--user) strictly.** User writes concept code, you write scaffolding. **Never** offer to write the agent loop / tool registry / hook chain / MCP wiring / context manager / subagent dispatcher — even if the user seems stuck. When in doubt, ask focused questions; don't write the thing being studied.
+- **Respect [Working mode](#working-mode-ai-assistant--user) strictly.** In `packages/mini-agent`, the user writes concept code and the AI writes scaffolding; **never** offer to write the agent loop / tool registry / hook chain / MCP wiring / context manager / subagent dispatcher. Framework labs use the separate two-stage workflow defined below and in their package README.
 - **Don't over-quiz once understanding is demonstrated.** A working run + a coherent debug story = they got it. Move on, don't ask "do you understand X" three different ways.
 - **Be terse.** No trailing recaps ("to summarize..."), no "let me know if..." sign-offs, no emojis unless explicitly asked.
 - **Don't auto-commit.** Show the diff, summarize what changed, wait for explicit "commit" or "push" from the user.
 
 ### Cold-start read order
 
-1. **This file (`AGENTS.md`)** — project rules, Working mode, phased plan, hard constraints
-2. **Latest `packages/mini-agent/notes/phaseN.md`** — what's verified + the user's current mental model + open questions
-3. **Latest `packages/mini-agent/docs/phaseN-<topic>-design.md`** — frozen design rationale + verification checklist (the canonical "why" record)
-4. **`packages/mini-agent/README.md`** — progress table (the source of truth for "what phase are we on")
-5. **`packages/mini-agent/src/*.ts`** — inline comments are intentionally dense; read them before suggesting changes
+1. **This file (`AGENTS.md`)** — project rules, Working mode, package boundaries, hard constraints
+
+Then branch by the package in scope:
+
+- **`packages/mini-agent` task**
+  1. Latest `packages/mini-agent/notes/phaseN.md` — what's verified + current mental model + open questions
+  2. Latest `packages/mini-agent/docs/phaseN-<topic>-design.md` — frozen design rationale + verification checklist
+  3. `packages/mini-agent/README.md` — progress table (the source of truth for the current phase)
+  4. `packages/mini-agent/src/*.ts` — read the intentionally dense inline comments before suggesting changes
+- **`packages/langchain-lab` task**
+  1. `packages/langchain-lab/README.md` — progress table (the source of truth for the current Topic)
+  2. `packages/langchain-lab/LEARNING.md` — roadmap, depth boundaries, completion criteria, self-checks
+  3. `packages/langchain-lab/package.json` — installed LangChain v1 integrations
+  4. Existing `packages/langchain-lab/src/*.ts` — staged concept demos; read their TODOs and implementation state before acting
 
 ### Where things live
 
@@ -65,7 +74,9 @@ See [`packages/mini-agent/LEARNING.md`](./packages/mini-agent/LEARNING.md) for t
 
 ## Working mode (AI assistant × user)
 
-Deliberate split to maximize learning per typed line. Future AI assistant sessions: **respect this strictly.**
+The from-scratch core and framework labs intentionally use different collaboration modes. Future AI assistant sessions: **respect this strictly.**
+
+### From-scratch core (`packages/mini-agent`)
 
 **User types by hand** — concept code, DO NOT offer to write these:
 - Agent loop / ReAct mechanics
@@ -86,7 +97,18 @@ Deliberate split to maximize learning per typed line. Future AI assistant sessio
 - Code review after user has written + run something
 - Answering "why does this work" questions *without* rewriting the user's code
 
-### Per-phase workflow
+### Framework labs (`packages/*-lab`)
+
+Framework API demos use a two-stage workflow:
+
+1. **Requirements stage** — the AI creates or updates the Topic file with configuration/scaffolding and detailed TODO comments describing the API calls, observations, questions, and completion criteria. It does not implement the TODOs yet.
+2. **Implementation stage** — after the user has reviewed the comments, clarified the mental model, and explicitly asks to implement, the AI may complete the concept demo, run it, typecheck it, and explain how the observed behavior maps to the framework abstraction.
+
+Do not skip directly from a new Topic to a finished demo unless the user explicitly asks to skip the requirements stage. The user may still choose to implement any TODO personally. This exception applies only to framework labs; the `packages/mini-agent` hand-written core rules above remain unchanged.
+
+### Per-phase workflow (`packages/mini-agent` only)
+
+The workflow below applies only to the from-scratch core. Framework labs use their package-level `LEARNING.md` roadmap + `README.md` progress table and do not require per-Topic design docs or notes.
 
 **During the phase (writing the concept code):**
 
@@ -110,7 +132,7 @@ Deliberate split to maximize learning per typed line. Future AI assistant sessio
 
 > **Why no git tags?** From Phase 2 onward we anchor each phase via `packages/mini-agent/docs/phaseN-*.md` + `packages/mini-agent/notes/phaseN.md` instead. They live in the repo as plain files (survive forever, searchable, reviewable in PRs) and avoid the `git push --tags` footgun. Existing `phase0-done` / `phase1-done` tags are kept as-is — no need to delete or backfill new ones.
 
-**Why this split**: letting the AI assistant write the concept code is the same anti-pattern as using LangChain — it hides exactly the mechanics the user is trying to internalize. The per-phase design doc + notes ensure each milestone is recoverable and your understanding is recorded.
+**Why this split**: in the from-scratch core, letting the AI assistant write the concept code would hide exactly the mechanics the user is trying to internalize. The per-phase design doc + notes ensure each milestone is recoverable and understanding is recorded. Framework labs study public APIs rather than rebuilding those mechanics, so they use the two-stage workflow above.
 
 ## Tech stack
 
@@ -153,7 +175,9 @@ mini-agent/                         # pnpm workspace root (private, no app code)
     │       ├── hooks.ts            #     (Phase 2) pre/post tool hooks
     │       └── tools/              #     registry.ts + individual tools
     ├── langchain-lab/              #   LangChain.js learning track (own @langchain/* deps)
-    │   └── src/README.md           #     topic checklist; demos written by user
+    │   ├── README.md               #     progress table + run instructions
+    │   ├── LEARNING.md             #     v1 topic roadmap + self-check questions
+    │   └── src/                    #     staged Topic demos: AI writes TODOs, then implements after user confirmation
     └── langgraph-lab/              #   (built when the user reaches it — same shape)
 ```
 
@@ -163,7 +187,7 @@ mini-agent/                         # pnpm workspace root (private, no app code)
 
 ### Framework learning track (parallel monorepo packages)
 
-`packages/langchain-lab` (and later `packages/langgraph-lab`) are a **separate, parallel** learning track from the 8-phase from-scratch plan — added after the core was hand-written, to study the production frameworks' APIs. They are **independent packages**: own `package.json` / `node_modules` so framework deps never touch `packages/mini-agent`. They do **not** follow the per-phase `docs/` + `notes/` discipline (lighter sandbox; just a topic checklist in each lab's `src/README.md`). Working mode still applies — **the user writes the concept demos; the AI only scaffolds config**. `langchain` first, `langgraph` later, kept in separate packages so the two are never confused.
+`packages/langchain-lab` (and later `packages/langgraph-lab`) are a **separate, parallel** learning track from the 8-phase from-scratch plan — added after the core was hand-written, to study the production frameworks' APIs. They are **independent packages** with their own `package.json` and dependency graph, so framework deps never touch `packages/mini-agent`. Framework labs keep a package-level `LEARNING.md` roadmap + `README.md` progress table, but do not copy the core package's per-phase `docs/` + `notes/` ritual. They follow the two-stage requirements-then-implementation workflow: the AI first writes detailed TODO comments, then implements only after the user reviews them and explicitly requests implementation. `langchain` first, `langgraph` later, kept in separate packages so the two are never confused.
 
 ## Phased plan (summary — full version in [`packages/mini-agent/LEARNING.md`](./packages/mini-agent/LEARNING.md))
 

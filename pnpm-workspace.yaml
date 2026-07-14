@@ -1,2 +1,5 @@
 packages:
   - 'packages/*'
+minimumReleaseAgeExclude:
+  - '@langchain/deepseek@1.1.5'
+  - '@langchain/openai@1.5.5'

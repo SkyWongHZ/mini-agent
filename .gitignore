@@ -19,4 +19,5 @@ logs/
 .DS_Store
 
 # Independent reference projects (each has its own git history)
+/example/
 packages/mini-agent/example/

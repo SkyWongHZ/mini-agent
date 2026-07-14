@@ -28,5 +28,5 @@ pnpm -r typecheck                                     # 所有包 typecheck
 ## 更多
 
 - **规则 / 架构 / Working mode** → [`AGENTS.md`](./AGENTS.md)(给 AI 协作者的 canonical 项目说明;`CLAUDE.md` 导入它)
-- **学习路线图 + 每阶段自检** → [`packages/mini-agent/LEARNING.md`](./packages/mini-agent/LEARNING.md)
-- **各包局部说明** → [`packages/mini-agent/README.md`](./packages/mini-agent/README.md) · [`packages/langchain-lab/src/README.md`](./packages/langchain-lab/src/README.md)
+- **学习路线图 + 自检** → [`packages/mini-agent/LEARNING.md`](./packages/mini-agent/LEARNING.md) · [`packages/langchain-lab/LEARNING.md`](./packages/langchain-lab/LEARNING.md)
+- **各包局部说明 / 进度** → [`packages/mini-agent/README.md`](./packages/mini-agent/README.md) · [`packages/langchain-lab/README.md`](./packages/langchain-lab/README.md)
